@@ -12,9 +12,12 @@ class PdfSummarizerAgent(BaseAgent):
             instructions = """ Extract and structure information from resume(cv),
             Focus on:
             -Personal Information
-            -Work Expierience
+            -Work Expierience (in years)
+            -Candidate expierience level (Intern/Junior/Mid/Senior)
             -Education
-            -Skills and Qualifications
+            -Skills 
+            -Key Achievements
+            -Main Areas of Expertise
 
             Provide your answer in clear and structured format.
             """

@@ -7,14 +7,11 @@ class RecommenderAgent(BaseAgent):
         super().__init__(
             name = "Recommender Agent",
             instructions = """Generate final recommendations. 
-            Consider:
-            - Skills Analysis results
-            - Job Matches
-            - Candidate Evaluation results
-
+            Consider Evaluations of every matched job.
+            
+            Out of all matched jobs pick the one you see as the best for the candidate, additionaly provide your confidence score
             Provide clear next steps and recommendations.
-            For every job matched list the job 
-            and add your confidence score.
+            Data needed will be provided by the user.
             """
         )
     
@@ -22,8 +19,16 @@ class RecommenderAgent(BaseAgent):
         print("🚅 Generating final Recommendations: ")
         
         ctx = eval(messages[-1]["content"])
-        recommendation  = self.query_ollama(str(ctx))
+
+        recommender_prompt = f"""
+            Data neccesary for this task is here:
+                Evaluations for every job (list of JSON dictionaries, one for every matched job)
+                    data: {ctx["candidate_to_jobs_evaluation"]}
+            """
+
+        res = self.query_ollama(recommender_prompt)
+        
         return {
-            "final_recommendation" : recommendation,
+            "final_recommendation" : res,
             "timestamp": datetime.now().strftime("%H:%M %d-%m-%Y")
         }

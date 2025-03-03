@@ -1,6 +1,8 @@
 from typing import Dict, Any
 from .base_agent import BaseAgent
-
+import json
+from utils.exceptions import AnalyzerJSONParseError
+import datetime
 class AnalyzerAgent(BaseAgent):
     def __init__(self):
         super().__init__(
@@ -17,9 +19,39 @@ class AnalyzerAgent(BaseAgent):
         )
 
     async def run(self, messages: list) -> Dict[str, Any]:
-        """Analyze the extracted resume data"""
         print("🔍 Analyzer: Analyzing candidate profile")
-        raise NotImplementedError
-        #extracted_data = eval(messages[-1]["content"])
+
+        extracted_data = eval(messages[-1]["content"])
         
-        #TODO
+        analysis_prompt = f"""
+        Analyze this resume data and return a JSON object with the following structure:
+        {{
+            "experience_level": "Intern/Junior/Mid/Senior",
+            "education": {{
+                "level": "Bachelors/Masters/PhD",
+                "field": "field of study"
+            }},
+            "years_of_experience": number,
+            "technical_skills": ["skill1", "skill2"],
+            "key_achievements": ["achievement1", "achievement2"],
+            "expertise_areas": ["domain1", "domain2"]
+        }}
+
+        CV data:
+        {extracted_data["structured_text"]}
+
+        Return ONLY the JSON object, no other text.
+        """
+
+        res = self.query_ollama(analysis_prompt)
+        try:
+            parsed_json = self.parse_json(res)
+        except json.JSONDecodeError:
+            raise AnalyzerJSONParseError(res)
+
+        
+
+        return {
+            "analysis_json": parsed_json,
+            "timestamp": datetime.now().strftime("%H:%M %d-%m-%Y")
+        }
