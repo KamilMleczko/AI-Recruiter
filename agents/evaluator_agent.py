@@ -1,7 +1,7 @@
 #GIT
 from .base_agent import BaseAgent
 from typing import Dict, Any
-import datetime
+import datetime as dt
 class EvaluatorAgent(BaseAgent):
     def __init__(self):
         super().__init__(
@@ -31,7 +31,7 @@ class EvaluatorAgent(BaseAgent):
             res = "Candidate dind't match any existing jobs"
             return {
                 "evaluator_report": res,
-                "timestamp": datetime.now().strftime("%H:%M %d-%m-%Y")
+                "timestamp": dt.datetime.now().strftime("%H:%M %d-%m-%Y")
             }
         
         
@@ -54,6 +54,6 @@ class EvaluatorAgent(BaseAgent):
 
         return {
             "evaluator_report": res,
-            "timestamp": datetime.now().strftime("%H:%M %d-%m-%Y")
+            "timestamp": dt.datetime.now().strftime("%H:%M %d-%m-%Y")
         }
         

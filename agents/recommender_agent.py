@@ -1,7 +1,7 @@
 #GIT
 from .base_agent import BaseAgent
 from typing import Dict, Any
-import datetime
+import datetime as dt
 class RecommenderAgent(BaseAgent):
     def __init__(self):
         super().__init__(
@@ -30,5 +30,5 @@ class RecommenderAgent(BaseAgent):
         
         return {
             "final_recommendation" : res,
-            "timestamp": datetime.now().strftime("%H:%M %d-%m-%Y")
+            "timestamp": dt.datetime.now().strftime("%H:%M %d-%m-%Y")
         }

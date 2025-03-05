@@ -1,13 +1,13 @@
 from typing import Dict, Any
-from .agents.pdf_summarizer_agent import PdfSummarizerAgent
-from .agents.analyzer_agent import AnalyzerAgent
-from .agents.job_matcher import JobMatcher
-from .agents.evaluator_agent import EvaluatorAgent
-from .agents.recommender_agent import RecommenderAgent
+from agents.pdf_summarizer_agent import PdfSummarizerAgent
+from agents.analyzer_agent import AnalyzerAgent
+from agents.job_matcher import JobMatcher
+from agents.evaluator_agent import EvaluatorAgent
+from agents.recommender_agent import RecommenderAgent
 from app_config import max_job_matches_num
 
 
-async def process_application(cv_data: Dict[str, Any]) -> Dict[str, Any]:
+async def start_process(cv_data: Dict[str, Any]) -> Dict[str, Any]:
     
     pdf_summarizer = PdfSummarizerAgent()
     analyzer = AnalyzerAgent()

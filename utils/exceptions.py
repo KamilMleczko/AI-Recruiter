@@ -19,8 +19,8 @@ class AnalyzerError(Exception):
 
 class AnalyzerJSONParseError(AnalyzerError):
     """Raised when JSON parser failed in Analysis phase"""
-    def __init__(self, text_to_be_parsed):
-        super().__init__(f"Failed to parse json in Analysis phase. Text that failed parsing: {text_to_be_parsed}")
+    def __init__(self, text_to_be_parsed, e: Exception):
+        super().__init__(f"Failed to parse json in Analysis phase. Text that failed parsing: {text_to_be_parsed}, original error: {e}")
 
 class JobMatcherError(Exception):
     """Raised when error is encountered in JobMatcher"""
@@ -40,4 +40,8 @@ class JobMatcherErrorSkillListEmpty(JobMatcherError):
     """Raised when candidate skill list is empty"""
     def __init__(self):
         super().__init__("Candidate skill list is empty. Error occured in Job Matcher.")
+
+
+
+
 
