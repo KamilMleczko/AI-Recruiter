@@ -1,3 +1,4 @@
+from typing import Dict, List, Any
 class PDFSummarizerError(Exception):
     """Base exception for all PDFExtractor errors."""
     pass
@@ -19,8 +20,8 @@ class AnalyzerError(Exception):
 
 class AnalyzerJSONParseError(AnalyzerError):
     """Raised when JSON parser failed in Analysis phase"""
-    def __init__(self, text_to_be_parsed, e: Exception):
-        super().__init__(f"Failed to parse json in Analysis phase. Text that failed parsing: {text_to_be_parsed}, original error: {e}")
+    def __init__(self, text_to_be_parsed):
+        super().__init__(f"Failed to parse json in Analysis phase. Text that failed parsing: {text_to_be_parsed}")
 
 class JobMatcherError(Exception):
     """Raised when error is encountered in JobMatcher"""
@@ -41,7 +42,7 @@ class JobMatcherErrorSkillListEmpty(JobMatcherError):
     def __init__(self):
         super().__init__("Candidate skill list is empty. Error occured in Job Matcher.")
 
-
-
-
-
+class JobMatcherInvalidWorkExp(JobMatcherError):
+    """Raised when candidate work expierience couldn't be assesed"""
+    def __init__(self, employment_history: List[Dict[str, Any]], e: Exception):
+        super().__init__(f"Cv work expirience assesment failed with e: {e} and employment_history: {employment_history}")

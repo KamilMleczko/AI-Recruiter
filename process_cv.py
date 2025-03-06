@@ -1,17 +1,17 @@
 from typing import Dict, Any
 from agents.pdf_summarizer_agent import PdfSummarizerAgent
 from agents.analyzer_agent import AnalyzerAgent
-from agents.job_matcher import JobMatcher
+from agents.job_matcher import JobMatcherAgent
 from agents.evaluator_agent import EvaluatorAgent
 from agents.recommender_agent import RecommenderAgent
-from app_config import max_job_matches_num
+from app_config import max_job_match_skill_num
 
 
 async def start_process(cv_data: Dict[str, Any]) -> Dict[str, Any]:
     
     pdf_summarizer = PdfSummarizerAgent()
     analyzer = AnalyzerAgent()
-    job_matcher = JobMatcher() #not an agent but works alongside them
+    job_matcher = JobMatcherAgent() #not an agent but works alongside them
     evaluator = EvaluatorAgent()
     recommender = RecommenderAgent()
 
@@ -37,14 +37,23 @@ async def start_process(cv_data: Dict[str, Any]) -> Dict[str, Any]:
 
 
         job_matches = await job_matcher.run(
-            [{"role": "user", "content": str(analysis_results)}]
+            [{"role": "user", "content": analysis_results}]
         )
         ctx.update(
             {"job_matches": job_matches, "current_stage": "screening"}
         )
 
+        if len(ctx["job_matches"]["matched_jobs"]) == 0:
+            ctx.update({"status": "no_jobs_matched", "error": str(e)})
+            return ctx
+        
+        if len(ctx["job_matches"]["matched_jobs"]) < max_job_match_skill_num:
+            loop_num = len(ctx["job_matches"]["matched_jobs"])
+        else:
+            loop_num = max_job_match_skill_num
         candidate_to_jobs_evaluation =[]
-        for i in range(max_job_matches_num):
+        for i in range(loop_num):
+            
             evaluator_results = await evaluator.run(
                 [{"role": "user", "content": str(ctx)}], i
             )
@@ -61,7 +70,7 @@ async def start_process(cv_data: Dict[str, Any]) -> Dict[str, Any]:
             [{"role": "user", "content": str(ctx)}]
         )
         ctx.update(
-            {"final_recommendation": final_recommendation}
+            {"final_recommendation": final_recommendation, "status": "success"}
         )
 
         return ctx
@@ -69,3 +78,4 @@ async def start_process(cv_data: Dict[str, Any]) -> Dict[str, Any]:
     except Exception as e:
         ctx.update({"status": "failed", "error": str(e)})
         raise
+

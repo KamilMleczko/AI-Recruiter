@@ -36,28 +36,25 @@ class BaseAgent:
             return None
             
     def parse_json(self, text: str) -> Dict[str, Any]:
-            try:
-                try:
-                    return json.loads(text)
-                except json.JSONDecodeError:
-                    pass
-                
-                json_matches = re.findall(r'\{[^{}]*\}', text)
-                
-                for match in json_matches:
-                    try:
-                        return json.loads(match)
-                    except json.JSONDecodeError:
-                        continue
-                
-                try:
-                    cleaned_text = text.replace("'", '"')
-                    return json.loads(cleaned_text)
-                except json.JSONDecodeError:
-                    pass
-                
-                return {"error": "No valid JSON content found"}
-            
-            except Exception as e:
-                print(f"Error parsing JSON: {e}")
-                return {"error": f"Parsing error: {str(e)}"}
+        try:
+
+            if text.strip().startswith('```') and '```' in text:
+                # Extract content between markdown code blocks
+                match = re.search(r'```(?:json)?\s*\n([\s\S]+?)\n\s*```', text)
+                if match:
+                    text = match.group(1)
+                else:
+                    # If regex fails, just strip the backticks
+                    text = text.strip().strip('`')
+            # Replace "not stated" with "not_stated" before parsing
+            text = text.replace('"not stated"', '"not_stated"')
+
+            return json.loads(text)
+        
+        except Exception as e:
+            print(f"Error parsing JSON-like content: {e} in text: {text}") 
+            return None
+        
+
+        
+

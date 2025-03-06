@@ -12,8 +12,8 @@ class PdfSummarizerAgent(BaseAgent):
             instructions = """ Extract and structure information from resume(cv), that will be given to you as input from the user.
             Split the text into following sections:
             -Personal Information
-            -Work Expierience (list all companies and roles candidate held with time period)
-            -Candidate expierience level (intern/junior/mid/senior/not stated) 
+            -Work Expierience (list ALL companies and roles candidate held with time periods, including internships)
+            -Candidate expierience level (intern/junior/mid/senior/not_stated) 
                 For Candidate experience level list intern/junior/mid/senior ONLY IF IT WAS EXPLICITLY STATED in cv, if it was not then list ONLY "Not Stated" under that category.
                 If there were EXPLICIT mentions of DIFFRENT expierience levels across the jobs then list ONLY the highest expierience level (example: first job: Junior, second Job: Mid, you list ONLY Mid).
             -Education

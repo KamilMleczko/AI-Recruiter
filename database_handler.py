@@ -10,6 +10,7 @@ def add_example_job_to_database(db):
         'job_name': 'Software Engineer',
         'location': 'San Francisco, CA',
         'experience_level': 'Mid',
+        'years_of_experience': 4,
         'required_skills': ['Python', 'JavaScript', 'Git', 'REST APIs'],
         'optional_skills': ['React', 'Docker', 'AWS', 'CI/CD'],
         'salary': '$120,000 - $150,000',
@@ -27,6 +28,7 @@ def add_job_to_database(
     job_name: str,
     location: str,
     experience_level: str,
+    years_of_experience: int,
     required_skills: List[str],
     optional_skills: List[str],
     salary: str,
@@ -34,29 +36,12 @@ def add_job_to_database(
     description: str
 
 ) -> str:
-    if not isinstance(company_name, str):
-        raise TypeError("company_name must be a string")
-    if not isinstance(job_name, str):
-        raise TypeError("job_name must be a string")
-    if not isinstance(location, str):
-        raise TypeError("location must be a string")
-    if not isinstance(experience_level, str):
-        raise TypeError("experience_level must be a string")
-    if not isinstance(salary, str):
-        raise TypeError("salary must be a string")
-    if not isinstance(description, str):
-        raise TypeError("description must be a string")
-    if not isinstance(required_skills, list):
-        raise TypeError("required_skills must be a list")
-    if not isinstance(optional_skills, list):
-        raise TypeError("optional_skills must be a list")
-    if not isinstance(benefits, str):
-        raise TypeError("benefits must be a string")
     job_data = {
         'company_name': company_name,
         'job_name': job_name,
         'location': location,
         'experience_level': experience_level,
+        'years_of_experience': years_of_experience,
         'required_skills': required_skills,
         'optional_skills': optional_skills,
         'salary': salary,
