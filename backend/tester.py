@@ -1,6 +1,6 @@
 from process_cv import start_process
 import asyncio
-
+#test how the backend works, output of agents in console.
 async def main():
     cv_data = {
         "file_path": "data/senior.pdf"

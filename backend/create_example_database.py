@@ -1,7 +1,9 @@
 import firebase_admin
 from firebase_admin import firestore, credentials
-from database_handler import add_example_job_to_database, add_job_to_database
+from backend.database_handler import add_example_job_to_database, add_job_to_database
 import os
+
+# Initialize database and add example jobs, add your firebase key in "key.json" file before running
 
 path = os.path.join('.', 'key.json')
 cred = credentials.Certificate(path)
@@ -25,7 +27,7 @@ new_job_id = add_job_to_database(
 )
 
 
-# 10 more jobs
+
 jobs = [
     {
         "company_name": "Amazon",

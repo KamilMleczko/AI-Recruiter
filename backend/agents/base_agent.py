@@ -48,6 +48,7 @@ class BaseAgent:
                     text = text.strip().strip('`')
             # Replace "not stated" with "not_stated" before parsing
             text = text.replace('"not stated"', '"not_stated"')
+            text = text.replace('None', '"not_stated"')
 
             return json.loads(text)
         

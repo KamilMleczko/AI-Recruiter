@@ -15,7 +15,7 @@ class AnalyzerAgent(BaseAgent):
             5. Key achievements (list of strings)
             6. Main areas of expertise (list of strings)
             
-            Format the output as structured data (json).""",
+            Format the output as structured data (json).""" ,
         )
 
     async def run(self, messages: list) -> Dict[str, Any]:
@@ -60,7 +60,7 @@ class AnalyzerAgent(BaseAgent):
 
         Ad. expierience_level:
         If no expierience level is EXPLICITLY stated, in expierience_level field (in json you create) use string: "not_stated"
-        For expierience_level use only one of those 4 strings: intern/junior/mid/senior/not_stated, you can't use string like "junior/mid". 
+        For expierience_level use only one of those 4 strings: "intern"/"junior"/"mid"/"senior"/"not_stated".
         If in cv data there are mentioned multiple expierience levels across jobs, then in json add ONLY the highest expierience level (example: first job: Junior, second Job: Mid, you add ONLY Mid).
         Expierience level and all skills should be in lowercase.
 
@@ -71,7 +71,7 @@ class AnalyzerAgent(BaseAgent):
         For start_year and end_year you can add to json ONLY the year itself (no months or days), if it's not explicitly stated use "not_stated".
         
         Duration field (amount of years worked at given job) should be filled ONLY if it was explicitly stated in cv data (you can add to json ONLY the year itself no additioanl text - just the number), otherwise use "not_stated". 
-        For duration use only a number, no text allowed.
+        For duration use only a number, no text allowed. Time resumee was written is 2020 so act as if it's still 2020 when you calculate duration.
         
         For position field USE ONLY ONE OF THOSE 2 STRINGS: "intern"/"employee" (if it's not stated in cv data use "employee").
         Rememember that in cv data alongside work expierience,

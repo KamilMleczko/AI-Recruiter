@@ -14,7 +14,7 @@ class EvaluatorAgent(BaseAgent):
             - Green Flags
             - Red Flags and concerns
 
-            Required Skills score and Optional skill score is already calculated and passed to you as part of the data , 
+            Required Skills score and Optional skill score (in %) is already calculated and passed to you as part of the data , 
             so don't reevaluate it, just provide reasoning you can infer from the data.
 
             Use following rating scale:
@@ -27,7 +27,7 @@ class EvaluatorAgent(BaseAgent):
 
             Data required for this task will be passed by a user.
             Provide a comprehensive evaluation report with detailed reasoning.
-            Do not provide any other information, just the evaluation report - so no clear next steps or recommendations.
+            Additionaly provide clear next steps and recommendations.
             """
         )
 

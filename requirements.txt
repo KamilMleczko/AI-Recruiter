@@ -1,3 +1,4 @@
 swarms
 openai
 pdfminer.six
+flask

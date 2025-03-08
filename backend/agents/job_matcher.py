@@ -5,7 +5,7 @@ from utils.exceptions import JobMatcherJSONLoadsError, JobMatcherAnalysisNotFoun
 import firebase_admin
 from firebase_admin import firestore, credentials
 import datetime as dt
-from app_config import max_job_match_exp_num, max_job_match_skill_num
+from app_config import max_job_match_exp_num, max_job_match_skill_num, CURRENT_YEAR
 import os
 import numpy as np
 class JobMatcherAgent(BaseAgent):
@@ -36,7 +36,10 @@ class JobMatcherAgent(BaseAgent):
         key_path = os.path.join('.', 'key.json')
         cred = credentials.Certificate(key_path)
         
-        firebase_admin.initialize_app(cred)
+        if not firebase_admin._apps:  # Check if any apps are initialized
+            firebase_admin.initialize_app(cred)
+        else:
+            print("Firebase App already initialized. Using existing app.")
         db = firestore.client()
 
         try:
@@ -120,16 +123,16 @@ class JobMatcherAgent(BaseAgent):
 
                 if employment["position"].lower() == "intern":
                     if employment["duration"] == "not_stated":
-                        end_year = 2025 if employment.get("end_year") == "not_stated" else int(employment.get("end_year", 2025))
-                        start_year = 2025 if employment.get("start_year") == "not_stated" else int(employment.get("start_year", 2025))
+                        end_year = CURRENT_YEAR if employment.get("end_year") == "not_stated" else int(employment.get("end_year", CURRENT_YEAR))
+                        start_year = CURRENT_YEAR if employment.get("start_year") == "not_stated" else int(employment.get("start_year", CURRENT_YEAR))
                         duration = end_year - start_year
                         years_of_internship += duration
                     else:
                         years_of_internship += int(employment.get("duration", 1))
                 elif employment["position"].lower() == "employee":
                     if employment["duration"] == "not_stated":
-                        end_year = 2025 if employment.get("end_year") == "not_stated" else int(employment.get("end_year", 2025))
-                        start_year = 2025 if employment.get("start_year") == "not_stated" else int(employment.get("start_year", 2025))
+                        end_year = CURRENT_YEAR if employment.get("end_year") == "not_stated" else int(employment.get("end_year", CURRENT_YEAR))
+                        start_year = CURRENT_YEAR if employment.get("start_year") == "not_stated" else int(employment.get("start_year", CURRENT_YEAR))
                         duration = end_year - start_year
                         years_of_work += duration
                     else:
@@ -157,17 +160,17 @@ class JobMatcherAgent(BaseAgent):
             
             if expierience_level == "not_stated" and exp_based_on_years != "unknown":
                 assesed_experience_level = exp_based_on_years 
-                assesed_years_of_experience = years_of_work + years_of_internship
+                assesed_years_of_experience = years_of_work 
             elif exp_based_on_years == "unknown" and expierience_level != "not_stated":
                 assesed_experience_level = expierience_level
-                assesed_years_of_experience = rank_exp[expierience_level] + years_of_internship
+                assesed_years_of_experience = rank_exp[expierience_level] 
             else:
-                if rank_exp[expierience_level] > rank_exp[exp_based_on_years]:
-                    assesed_experience_level = expierience_level
-                else:
-                    assesed_experience_level = exp_based_on_years
-                assesed_years_of_experience = years_of_work + years_of_internship 
-                
+                # if rank_exp[expierience_level] > rank_exp[exp_based_on_years]:
+                #     assesed_experience_level = expierience_level
+                # else:
+                #     assesed_experience_level = exp_based_on_years
+                assesed_experience_level = expierience_level
+                assesed_years_of_experience = years_of_work 
 
         except Exception as e:
             raise JobMatcherInvalidWorkExp(employment_history, e)
@@ -249,7 +252,7 @@ class JobMatcherAgent(BaseAgent):
         
         sorted_jobs = sorted(
         job_list,
-        key=lambda job: (job["required_skills_score"], job["optional_skills_score"]),
+        key=lambda job: (int(job["required_skills_score"]), int(job["optional_skills_score"])),
         reverse=True
         )
 

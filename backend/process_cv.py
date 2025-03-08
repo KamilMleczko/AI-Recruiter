@@ -3,7 +3,6 @@ from agents.pdf_summarizer_agent import PdfSummarizerAgent
 from agents.analyzer_agent import AnalyzerAgent
 from agents.job_matcher import JobMatcherAgent
 from agents.evaluator_agent import EvaluatorAgent
-from agents.recommender_agent import RecommenderAgent
 from app_config import max_job_match_skill_num
 
 
@@ -13,7 +12,7 @@ async def start_process(cv_data: Dict[str, Any]) -> Dict[str, Any]:
     analyzer = AnalyzerAgent()
     job_matcher = JobMatcherAgent() #not an agent but works alongside them
     evaluator = EvaluatorAgent()
-    recommender = RecommenderAgent()
+    #recommender = RecommenderAgent()
 
     ctx = {
         "cv_data": cv_data,
@@ -63,16 +62,9 @@ async def start_process(cv_data: Dict[str, Any]) -> Dict[str, Any]:
             {
                 "candidate_to_jobs_evaluation": candidate_to_jobs_evaluation,
                 "current_stage": "recommendation",
+                "status": "success"
             }
         )
-
-        final_recommendation = await recommender.run(
-            [{"role": "user", "content": str(ctx)}]
-        )
-        ctx.update(
-            {"final_recommendation": final_recommendation, "status": "success"}
-        )
-
         return ctx
 
     except Exception as e:
